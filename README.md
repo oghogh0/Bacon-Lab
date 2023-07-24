@@ -85,7 +85,7 @@ A Bacon number is defined as the smallest number of films separating a given act
 
 <br/>
 <p align="left">
-KEVIN BACON:<br/>
+ACTOR PATHS:<br/>
 In this part, the goal is to find the chain of actors that connects Kevin Bacon to someone else. The main function used here is 'id_path'. <br/> 
 Firstly, by producing a list of actor IDs (any such shortest list if there are several) detailing a "Bacon path" from Kevin Bacon to an actor. If no path exists, return None. It is important to consider that the paths are not necessarily unique, hence any shortest list that connects Bacon to the actor denoted by actor_id is valid.<br/> 
     
@@ -129,12 +129,12 @@ The function 'id_path' returns the path of actor IDs between two actors. This is
                     visited.add(actor)
 
 
+<br/>
+<p align="left">
+MOVIE PATHS:<br/>
+This part explores possible sequences of movies one could watch in order to traverse the path from one actor to another. <br/>
+This function 'movie_path' determines the list of movie names that connect 2 arbitrary actors.<br/>
 
-def movie_path(raw_data, transformed_data, actor_id_1, actor_id_2):
-    """
-    Return movie name path between
-    2 actors
-    """
     # transformed_data = transform_data(transformed_data)
 
     movie_lst = []
@@ -162,13 +162,14 @@ def movie_path(raw_data, transformed_data, actor_id_1, actor_id_2):
     return named_movies_path
 
 
-def actor_path(transformed_data, actor_id_1, goal_test_function):
-    """
-    Return: a list containing actor IDs,
-    representing the shortest possible path from actor_id_1
-    to any actor that satisfies the goal-test function.
-    Otherwise, return None
-    """
+<br/>
+<p align="left">
+GENERALISE path finders:<br/>
+1. Currently the actor_to_actor_path function can only search for a particular actor. However, suppose I want to find the shortest path from an actor to any actor from a set of other actors, or an actor to any actor in a particular movie, etc. To account for these cases, it is helpful to generalise our notion of path-finding. <br/>
+
+
+This function is used as a goal test. It returns a list of actor IDs, representing the shortest possible path from the given actor ID to any actor that satisfies the goal-test function. If no actors satisfy the goal condition, it returns None. It is important to know that if the starting actor satisfies the goal test, the function returns a length-1 list containing only that actor's ID.<br/>
+
     # transformed_data = transform_data(transformed_data)
 
     agenda = [actor_id_1]
@@ -196,15 +197,9 @@ def actor_path(transformed_data, actor_id_1, goal_test_function):
                         agenda.append(actor)
                         visited.add(actor)
 
+<br/>
+2. This function finds chains of actors that connect one given movie to another. It returns the shortest possible list of actor ID numbers (in order) that connect the two input films, beginning with the ID number of an actor who was in the first film, and ending with the ID number of an actor who was in the second film. If there is no path connecting those two films, it instead returns None.<br/>
 
-def actors_connecting_films(transformed_data, film1, film2):
-    """
-    Return: shortest possible list of actor ID numbers (in order) 
-    that connect those two films. Your list should begin with the 
-    ID number of an actor who was in the first film, and it should 
-    end with the ID number of an actor who was in the second film.
-    If there is no path connecting those two films, your function should return None.
-    """
     lst_of_paths = []
     for actor1 in transformed_data["movies_dict"][film1]:
         for actor2 in transformed_data["movies_dict"][film2]:
